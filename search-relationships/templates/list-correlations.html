@@ -1,3 +1,4 @@
+<!--suppress JSUnresolvedVariable -->
 <div>
 
     <div class="variable-inputs" ng-hide="hideSearchBoxes">
@@ -66,83 +67,126 @@
                 Relationship Between <strong>{{predictorVariableName}}</strong> and
                 <strong>{{outcomeVariableName}}</strong>
             </h4>
-
             <div id="searchResultList">
-
                 <div class="row search-result" ng-repeat="c in correlations">
+                    <div class="flex justify-center items-center bg-gray-100 w-full">
+                        <div class="
+          bg-white
+          shadow-md
+          h-96
+          mx-3
+          rounded-3xl
+          flex flex-col
+          justify-around
+          items-center
+          overflow-hidden
+          sm:flex-row sm:h-52 sm:w-w-full
+          md:w-full
+        "
+                        >
+                            <img class="h-1/2 w-full sm:h-full sm:w-1/2 object-cover"
+                                    ng-src="{{c.imageUrl}}"
+                                    alt="image"/>
+                            <div
+                                    class="
+            flex-1
+            w-full
+            flex flex-col
+            items-baseline
+            justify-around
+            h-1/2
+            pl-6
+            sm:h-full sm:items-baseline sm:w-1/2
+          ">
+                                <div class="flex flex-col justify-start items-baseline">
+                                    <h1 class="font-normal mb-0 text-gray-600 font-sans">
+                                        <a href="" ng-click="setVariableFromListAndShowCorrelation(c.variableName)">
+                                            {{c.variableName}}
+                                        </a>
+                                    </h1>
+                                    <span class="text-s text-indigo-300 mt-0">
+                                        {{c.variableCategory}}
+                                    </span>
+                                </div>
+                                <p class="text-s text-gray-500 w-4/5">
+                                    <span ng-if="c.predictorExplanation">
+                                        {{c.predictorExplanation}}
+                                    </span>
+                                    <span ng-if="c.valuePredictingHighOutcomeExplanation">
+                                        {{c.valuePredictingHighOutcomeExplanation}}
+                                    </span>
+                                    <span ng-if="c.valuePredictingHighOutcomeExplanation">
+                                        {{c.valuePredictingLowOutcomeExplanation}}
+                                    </span>
+                                </p>
+                                <div class="w-full flex justify-between items-center controls text-center"
+                                     style="padding-right: 19px; padding-bottom: 5px;"
+                                     ng-hide="hideSearchBoxes">
+                                       <span class="fa fa-thumbs-o-up vote-thumb up"
+                                             uib-tooltip="{{getToolTipText('thumbUp', c)}}"
+                                             tooltip-placement="bottom"
+                                             tooltip-class="qmwp-tooltip"
+                                             ng-class="{'voted fa-thumbs-up': c.userVote==1}"
+                                             ng-click="vote(c, 1)">
+                                        </span>
+                                        <span class="fa fa-thumbs-o-down vote-thumb down"
+                                              uib-tooltip="{{getToolTipText('thumbDown', c)}}"
+                                              tooltip-placement="bottom"
+                                              tooltip-class="qmwp-tooltip"
+                                              ng-class="{'voted fa-thumbs-down': c.userVote==0}"
+                                              ng-click="vote(c, 0)">
+                                        </span>
+                                        <span class="fa fa-shopping-cart"
+                                              tooltip-class="qmwp-tooltip"
+                                              tooltip-placement="bottom"
+                                              uib-tooltip="Buy it here"
+                                              ng-click="goToAmazon(c.variableName)">
+                                        </span>
+                                        <span ng-if="commonOrUser === 'user'" class="fa fa-cog"
+                                              uib-tooltip="Improve our algorithms by optimizing the variable settings"
+                                              tooltip-placement="bottom"
+                                              tooltip-class="qmwp-tooltip"
+                                              ng-click="openVarSettingsModal(c.variableName)">
+                                        </span>
+                                        <span ng-if="commonOrUser === 'user'" class="fa fa-plus"
+                                              uib-tooltip="Add measurement for variable"
+                                              tooltip-placement="bottom"
+                                              tooltip-class="qmwp-tooltip"
+                                              ng-click="addMeasurement(c.variableName)">
+                                        </span>
+                                        <span class="fa fa-info-circle"
+                                              uib-tooltip-html="'{{getToolTipText('correlationDetails', c)}}'"
+                                              tooltip-placement="bottom"
+                                              tooltip-class="qmwp-tooltip">
+                                        </span>
+                                        <span ng-if="commonOrUser === 'user'" class="fa fa-download"
+                                              uib-tooltip="{{getToolTipText('download', c)}}"
+                                              tooltip-placement="bottom"
+                                              tooltip-class="qmwp-tooltip"
+                                              ng-click="getDataDownloadLink(c)">
+                                        </span>
+                                    </div><!--
+                                    <button
+                                            class="bg-gray-700 mr-5 text-white px-3 py-1 rounded-sm shadow-md"
+                                    >
+                                        Add
+                                    </button>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                    <h4><a href="" ng-click="setVariableFromListAndShowCorrelation(c.variableName)">
-                        {{c.variableName}}
-                    </a>
-                        <small>({{c.variableCategory}})</small>
-                    </h4>
+
 
                     <div class="details-and-controls">
 
                         <div class="col-md-8">
 
-                            <p ng-if="c.correlation.predictorExplanation">
-                                {{c.correlation.predictorExplanation}}</p>
 
-                            <p ng-if="c.correlation.valuePredictingHighOutcomeExplanation">
-                                {{c.correlation.valuePredictingHighOutcomeExplanation}}
-                            </p>
-
-                            <p ng-if="c.correlation.valuePredictingHighOutcomeExplanation">
-                                {{c.correlation.valuePredictingLowOutcomeExplanation}}
-                            </p>
 
                         </div>
 
-                        <div class="col-md-4 controls text-center" ng-hide="hideSearchBoxes" >
 
-                            <span class="fa fa-thumbs-o-up vote-thumb up"
-                                  uib-tooltip="{{getToolTipText('thumbUp', c.correlation)}}"
-                                  tooltip-placement="bottom"
-                                  tooltip-class="qmwp-tooltip"
-                                  ng-class="{'voted fa-thumbs-up': c.correlation.userVote==1}"
-                                  ng-click="vote(c, 1)">
-                            </span>
-
-                            <span class="fa fa-thumbs-o-down vote-thumb down"
-                                  uib-tooltip="{{getToolTipText('thumbDown', c.correlation)}}"
-                                  tooltip-placement="bottom"
-                                  tooltip-class="qmwp-tooltip"
-                                  ng-class="{'voted fa-thumbs-down': c.correlation.userVote==0}"
-                                  ng-click="vote(c, 0)">
-                            </span>
-
-                            <span class="fa fa-shopping-cart"
-                                  tooltip-class="qmwp-tooltip"
-                                  tooltip-placement="bottom"
-                                  uib-tooltip="Buy it here"
-                                  ng-click="goToAmazon(c.variableName)"
-                            </span>
-                            </span>
-                            <span ng-if="commonOrUser === 'user'" class="fa fa-cog"
-                                  uib-tooltip="Improve our algorithms by optimizing the variable settings"
-                                  tooltip-placement="bottom"
-                                  tooltip-class="qmwp-tooltip"
-                                  ng-click="openVarSettingsModal(c.variableName)">
-                            </span>
-                            <span ng-if="commonOrUser === 'user'" class="fa fa-plus"
-                                  uib-tooltip="Add measurement for variable"
-                                  tooltip-placement="bottom"
-                                  tooltip-class="qmwp-tooltip"
-                                  ng-click="addMeasurement(c.variableName)">
-                            </span>
-                            <span class="fa fa-info-circle"
-                                  uib-tooltip-html="'{{getToolTipText('correlationDetails', c.correlation)}}'"
-                                  tooltip-placement="bottom"
-                                  tooltip-class="qmwp-tooltip">
-                            </span>
-                            <span ng-if="commonOrUser === 'user'" class="fa fa-download"
-                                  uib-tooltip="{{getToolTipText('download', c.correlation)}}"
-                                  tooltip-placement="bottom"
-                                  tooltip-class="qmwp-tooltip"
-                                  ng-click="getDataDownloadLink(c.correlation)">
-                            </span>
-                        </div>
 
                     </div>
 
@@ -179,15 +223,7 @@
 
         <div ng-if="totalCorrelations.length == 1">
 
-            <qm-time-line ng-if="showCharts" outcome="{{outcomeVariableName}}"
-                          predictor="{{predictorVariableName}}"
-                          control="timeLineControl">
-            </qm-time-line>
 
-            <qm-scatter-plot ng-if="showCharts" outcome="{{outcomeVariableName}}"
-                             predictor="{{predictorVariableName}}"
-                             control="scatterControl">
-            </qm-scatter-plot>
 
 
 
@@ -214,7 +250,7 @@
                 </div>
             </div>
 
-            <qm-study correlation="totalCorrelations[0].correlation">
+            <qm-study correlation="totalCorrelations[0]">
 
             </qm-study>
 
@@ -237,5 +273,14 @@
     <div class="charts-loading" ng-show="showLoading">
         <img src="https://app.quantimo.do/qm-connect/loader_gears.gif">
     </div>
+    <qm-time-line ng-if="showCharts" outcome="{{outcomeVariableName}}"
+                  predictor="{{predictorVariableName}}"
+                  control="timeLineControl">
+    </qm-time-line>
+
+    <qm-scatter-plot ng-if="showCharts" outcome="{{outcomeVariableName}}"
+                     predictor="{{predictorVariableName}}"
+                     control="scatterControl">
+    </qm-scatter-plot>
 
 </div>

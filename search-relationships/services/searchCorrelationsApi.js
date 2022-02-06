@@ -50,9 +50,9 @@ angular.module('qmSearchRelationships')
         };
         this.searchCorrelations = function (cause, effect) {
             var requestUrl = settings.apiHost;
-            if (settings.commonOrUser == 'user') {
+            if (settings.commonOrUser === 'user') {
                 requestUrl += 'api/v1/correlations?';
-            } else if (settings.commonOrUser == 'common') {
+            } else if (settings.commonOrUser === 'common') {
                 requestUrl += 'api/v1/aggregatedCorrelations?';
             } else {
                 console.error('endpoint type (common or public) is not specified');
@@ -63,8 +63,7 @@ angular.module('qmSearchRelationships')
             if (effect) {
                 requestUrl += 'effect=' + effect;
             }
-            var response = $http.get(requestUrl);
-            return response;
+            return $http.get(requestUrl);
         };
         this.vote = function (correlation, vote, callback) {
             $http.post(settings.apiHost + "api/v1/votes", {
@@ -125,9 +124,6 @@ angular.module('qmSearchRelationships')
             $http.get(settings.apiHost + 'api/v1/user/me').then(function (response) {
                 callback(response.data);
             });
-        };
-        this.getMeasurementsRange = function () {
-            return $http.get(settings.apiHost + 'api/v1/measurementsRange');
         };
         this.getDailyMeasurements = function (variableName, startTime, endTime) {
             var deferred = $q.defer();

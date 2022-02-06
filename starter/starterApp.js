@@ -21,6 +21,14 @@ angular.module('qmStarterApp',
                 templateUrl: 'starter/templates/login.html',
                 controller: 'loginController'
             })
+            .state('variables', {
+                templateUrl: 'search-variables/templates/main.html',
+                controller: 'searchVariablesController'
+            })
+            .state('relationships', {
+                templateUrl: 'search-relationships/templates/list-correlations.html',
+                controller: 'searchRelationshipsController'
+            })
             .state('no-plugin', {
                 templateUrl: 'starter/templates/no-plugin.html',
                 controller: 'noPluginController'
@@ -32,7 +40,7 @@ angular.module('qmStarterApp',
         var currentDomainWithoutPort = settingsProvider.stripPort(currentDomainWithPort);
         var apiUrl = 'app.quantimo.do';
         if (currentDomainWithoutPort.indexOf('staging') !== -1) {apiUrl = 'staging.quantimo.do';} //if app hosted on staging
-        if (currentDomainWithoutPort.indexOf('local') !== -1) {apiUrl = 'local.quantimo.do';} //if app in development
+        //if (currentDomainWithoutPort.indexOf('local') !== -1) {apiUrl = 'local.quantimo.do';} //if app in development
         if(qm.urlHelper.getParam('apiUrl')){apiUrl = qm.urlHelper.getParam('apiUrl');}
         settingsProvider.setSettings({apiHost: 'https://'+apiUrl+'/'});
     });

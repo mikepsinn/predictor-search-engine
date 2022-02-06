@@ -37,7 +37,6 @@ angular.module('qmSearchRelationships')
                         $q.all([
                             QuantimodoSearchService.getVariableByName($scope.outcomeVariableName),
                             QuantimodoSearchService.getVariableByName($scope.predictorVariableName),
-                            QuantimodoSearchService.getMeasurementsRange()
                         ]).then(function (values) {
                             //when everything is fetched - assign values
                             outcome = values[0].data[0];

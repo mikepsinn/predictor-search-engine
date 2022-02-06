@@ -6,7 +6,7 @@ angular.module('qmSideEffects')
             scope: {
                 correlation: '=',
             },
-            templateUrl: 'side-effects/templates/study.html',
+            templateUrl: 'search-relationships/templates/study.html',
             controller: function ($scope) {
                 console.log('Study directive controller works');
 

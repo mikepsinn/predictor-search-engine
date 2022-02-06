@@ -62,39 +62,30 @@ angular.module('qmSearchRelationships').controller('searchRelationshipsControlle
                     console.debug('Correlations fetching response:', correlations);
                     if ($scope.outcomeVariableName && !$scope.predictorVariableName) {
                         //only outcome is set
-                        $scope.totalCorrelations = jQuery.map(correlations.data, function (correlation) {
-                            return {
-                                variableName: correlation.causeName || correlation.causeVariableName,
-                                variableCategory: correlation.causeVariableCategoryName,
-                                explanation: correlation.predictorExplanation,  //TODO do predictor always here?
-                                correlation: correlation
-                            };
-
+                        $scope.totalCorrelations = jQuery.map(correlations.data, function (c) {
+                            c.variableName = c.causeName || c.causeVariableName
+                            c.variableCategory = c.causeVariableCategoryName
+                            c.explanation = c.predictorExplanation
+                            return c;
                         });
 
                     } else if ($scope.predictorVariableName && !$scope.outcomeVariableName) {
                         //only predictor is set
-                        $scope.totalCorrelations = jQuery.map(correlations.data, function (correlation) {
-
-                            return {
-                                variableName: correlation.effectVariableNameName || correlation.effectVariableName,
-                                variableCategory: correlation.effectVariableCategoryName,
-                                explanation: correlation.predictorExplanation,  //TODO do predictor always here?
-                                correlation: correlation
-                            };
-
+                        $scope.totalCorrelations = jQuery.map(correlations.data, function (c) {
+                            c.variableName = c.effectVariableNameName
+                            c.variableCategory = c.effectVariableCategoryName
+                            c.explanation = c.predictorExplanation
+                            return c;
                         });
 
                     } else if ($scope.outcomeVariableName && $scope.predictorVariableName) {
                         //both: predictor and outcome  are set
-                        $scope.totalCorrelations = jQuery.map(correlations.data, function (correlation) {
+                        $scope.totalCorrelations = jQuery.map(correlations.data, function (c) {
 
-                            return {
-                                variableName: correlation.causeName || correlation.causeVariableName,
-                                variableCategory: correlation.causeVariableCategoryName,
-                                explanation: correlation.causeExplanation || correlation.predictorExplanation,  //TODO do predictor always here?
-                                correlation: correlation
-                            };
+                            c.variableName = c.causeName || c.causeVariableName
+                            c.variableCategory = c.causeVariableCategoryName
+                            c.explanation = c.predictorExplanation
+                            return c;
 
                         });
 
@@ -133,11 +124,11 @@ angular.module('qmSearchRelationships').controller('searchRelationshipsControlle
         $scope.effectWikiEntry = null;
         $scope.effectWikiImage = null;
 
-        var causeSearchTerm = $scope.totalCorrelations[0].correlation.causeVariableCommonAlias;
+        var causeSearchTerm = $scope.totalCorrelations[0].causeVariableCommonAlias;
         if(!causeSearchTerm){
             causeSearchTerm = $scope.predictorVariableName;
         }
-        
+
         wikipediaFactory.searchArticlesByTitle({
             term: causeSearchTerm, // Searchterm
             //lang: '<LANGUAGE>', // (optional) default: 'en'
@@ -164,7 +155,7 @@ angular.module('qmSearchRelationships').controller('searchRelationshipsControlle
             //on error
         });
 
-        var effectSearchTerm = $scope.totalCorrelations[0].correlation.effectVariableCommonAlias;
+        var effectSearchTerm = $scope.totalCorrelations[0].effectVariableCommonAlias;
         if(!effectSearchTerm){
             effectSearchTerm = $scope.outcomeVariableName;
         }
@@ -224,10 +215,10 @@ angular.module('qmSearchRelationships').controller('searchRelationshipsControlle
         win.focus();
     };
 
-    $scope.vote = function (correlationSet, likeValue) {
+    $scope.vote = function (c, likeValue) {
 
         //check if user have previously voted for this correlation
-        var prevVoted = correlationsVoteHelper.getPreviouslyVoted(correlationSet.correlation);
+        var prevVoted = correlationsVoteHelper.getPreviouslyVoted(c);
 
         //if previous vote is same as currently - it means un-vote
         if (prevVoted === likeValue) {
@@ -238,11 +229,11 @@ angular.module('qmSearchRelationships').controller('searchRelationshipsControlle
         if (likeValue === 'null') {
             //post un-vote without confirmation
 
-            QuantimodoSearchService.deleteVote(correlationSet.correlation, function (resp) {
+            QuantimodoSearchService.deleteVote(c, function (resp) {
 
-                correlationsVoteHelper.saveVotedCorrelation(correlationSet.correlation, likeValue);
+                correlationsVoteHelper.saveVotedCorrelation(c, likeValue);
 
-                correlationSet.correlation.userVote = likeValue;
+                c.userVote = likeValue;
 
             });
 
@@ -257,7 +248,7 @@ angular.module('qmSearchRelationships').controller('searchRelationshipsControlle
                 resolve: {
                     confirmationOptions: function () {
                         return {
-                            correlation: correlationSet.correlation,
+                            correlation: c,
                             likeValue: likeValue
                         }
                     }
@@ -268,28 +259,28 @@ angular.module('qmSearchRelationships').controller('searchRelationshipsControlle
                 //confirmed
 
                 if (likeValue !== 'null') {
-                    QuantimodoSearchService.vote(correlationSet.correlation, likeValue, function (resp) {
+                    QuantimodoSearchService.vote(c, likeValue, function (resp) {
 
-                        correlationsVoteHelper.saveVotedCorrelation(correlationSet.correlation, likeValue);
+                        correlationsVoteHelper.saveVotedCorrelation(c, likeValue);
 
-                        correlationSet.correlation.userVote = likeValue;
+                        c.userVote = likeValue;
 
                     });
                 } else {
-                    QuantimodoSearchService.deleteVote(correlationSet.correlation, function (resp) {
+                    QuantimodoSearchService.deleteVote(c, function (resp) {
 
-                        correlationsVoteHelper.saveVotedCorrelation(correlationSet.correlation, likeValue);
+                        correlationsVoteHelper.saveVotedCorrelation(c, likeValue);
 
-                        correlationSet.correlation.userVote = likeValue;
+                        c.userVote = likeValue;
 
                     });
                 }
 
-                $anchorScroll(htmlIdFilter(correlationSet.variableName));
+                $anchorScroll(htmlIdFilter(c.variableName));
 
             }, function () {
                 console.debug('Vote modal dismissed');
-                $anchorScroll(htmlIdFilter(correlationSet.variableName));
+                $anchorScroll(htmlIdFilter(c.variableName));
             });
         }
 

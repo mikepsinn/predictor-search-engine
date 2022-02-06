@@ -11,23 +11,6 @@ angular.module('qmSideEffects')
                 endPoint = endPoint + '?publicEffectOrCause=cause';
             return $http.get(settings.apiHost + endPoint);
         };
-        this.searchCorrelations = function (cause, effect) {
-            var requestUrl = settings.apiHost;
-            if (settings.commonOrUser == 'user') {
-                requestUrl += 'api/v1/correlations?';
-            } else if (settings.commonOrUser == 'common') {
-                requestUrl += 'api/v1/aggregatedCorrelations?';
-            } else {
-                console.error('endpoint type (common or public) is not specified');
-            }
-            if (cause) {
-                requestUrl += 'cause=' + cause + '&';
-            }
-            if (effect) {
-                requestUrl += 'effect=' + effect;
-            }
-            return $http.get(requestUrl);
-        };
         this.searchSideEffectCorrelations = function (cause) {
             var requestUrl = settings.apiHost;
             requestUrl += 'api/v1/aggregatedCorrelations?';
@@ -88,9 +71,6 @@ angular.module('qmSideEffects')
             $http.get(settings.apiHost + 'api/v1/user/me').then(function (response) {
                 callback(response.data);
             });
-        };
-        this.getMeasurementsRange = function () {
-            return $http.get(settings.apiHost + 'api/v1/measurementsRange');
         };
         this.getDailyMeasurements = function (variableName, startTime, endTime) {
             var deferred = $q.defer();

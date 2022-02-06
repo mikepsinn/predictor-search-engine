@@ -60,7 +60,7 @@ angular.module('qmCommon')
         };
         this.searchCorrelations = function (cause, effect) {
             var requestUrl = settings.apiHost;
-            if (settings.commonOrUser == 'user') {
+            if (settings.commonOrUser === 'user') {
                 requestUrl += 'api/v1/correlations?';
                 if (cause) {
                     requestUrl += 'cause=' + encodeURIComponent(cause) + '&';
@@ -68,7 +68,7 @@ angular.module('qmCommon')
                 if (effect) {
                     requestUrl += 'effect=' + encodeURIComponent(effect);
                 }
-            } else if (settings.commonOrUser == 'common') {
+            } else if (settings.commonOrUser === 'common') {
                 requestUrl += 'api/v1/public/correlations/search/';
                 if (cause && !effect) {
                     requestUrl += encodeURIComponent(cause) + "?effectOrCause=cause"
@@ -122,9 +122,6 @@ angular.module('qmCommon')
             $http.get(getQmUrl('api/v1/user/me')).then(function (response) {
                 callback(response.data);
             });
-        };
-        this.getMeasurementsRange = function () {
-            return $http.get(getQmUrl('api/v1/measurementsRange'));
         };
         this.getDailyMeasurements = function (variableName, startTime, endTime) {
             var deferred = $q.defer();

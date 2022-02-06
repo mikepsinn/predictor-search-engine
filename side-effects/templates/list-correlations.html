@@ -45,8 +45,8 @@
 
                     <div class="col-md-8">
 
-                        <p ng-if="c.correlation.percentOfPatients">
-                            {{c.correlation.percentOfPatients}} frequency score</p>
+                        <p ng-if="c.percentOfPatients">
+                            {{c.percentOfPatients}} frequency score</p>
 
 
                     </div>
@@ -76,7 +76,7 @@
                              control="scatterControl">
             </qm-scatter-plot>
 
-            <qm-study correlation="totalCorrelations[0].correlation">
+            <qm-study correlation="totalCorrelations[0]">
 
             </qm-study>
 
